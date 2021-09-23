@@ -1,176 +1,183 @@
----
-- name: Setting var file
-  hosts: redis
-  remote_user: mda
-  become: yes
-  tasks:
+# ---
+# - name: Setting var file
+#   hosts: redis
+#   remote_user: mda
+#   become: yes
+#   tasks:
 
-    - name: Collecting IPs
-      lineinfile:
-        line: "{{ inventory_hostname_short }}{{':'}} {{ ansible_eth0.ipv4.address }}"
-        path: "{{ playbook_dir }}/ips.yml"
-        create: yes
-      delegate_to: 127.0.0.1
-      tags: get-ips
+#     - name: Collecting IPs
+#       lineinfile:
+#         line: "{{ inventory_hostname_short }}{{':'}} {{ ansible_eth0.ipv4.address }}"
+#         path: "{{ playbook_dir }}/ips.yml"
+#         create: yes
+#       delegate_to: 127.0.0.1
+#       tags: get-ips
 
 
-- name: Redis Cluster Install
-  remote_user: mda
-  hosts: redis
-  become: yes
-  gather_facts: no
-  tasks:
+# - name: Redis Cluster Install
+#   remote_user: mda
+#   hosts: redis
+#   become: yes
+#   gather_facts: no
+#   tasks:
 
-    - name: Download redis.rpm file
-      get_url:
-        url: https://rpmfind.net/linux/centos/8.4.2105/AppStream/x86_64/os/Packages/redis-6.0.9-3.module_el8.4.0+788+86a4d8e8.x86_64.rpm
-        dest: /tmp/
-        mode: '0644'
+#     - name: Download redis.rpm file
+#       get_url:
+#         url: https://rpmfind.net/linux/centos/8.4.2105/AppStream/x86_64/os/Packages/redis-6.0.9-3.module_el8.4.0+788+86a4d8e8.x86_64.rpm
+#         dest: /tmp/
+#         mode: '0644'
 
-    - name: install redis
-      yum:
-        name: /tmp/redis-6.0.9-3.module_el8.4.0+788+86a4d8e8.x86_64.rpm
-        state: present
+#     - name: install redis
+#       yum:
+#         name: /tmp/redis-6.0.9-3.module_el8.4.0+788+86a4d8e8.x86_64.rpm
+#         state: present
 
-    - name: Swappoff disable
-      command: swapoff -a
-      ignore_errors: yes
+#     - name: Swappoff disable
+#       command: swapoff -a
+#       ignore_errors: yes
 
-    - name: Disable SELinux
-      selinux:
-        state: disabled
+#     - name: Disable SELinux
+#       selinux:
+#         state: disabled
 
-    - name: Redis.conf backup 
-      command: mv /etc/redis.conf /etc/redis_backup.conf
+#     - name: Redis.conf backup 
+#       command: mv /etc/redis.conf /etc/redis_backup.conf
+#       ignore_errors: yes
 
-    - name: Download redis.rpm file
-      copy:
-        src: "{{ playbook_dir }}/redis.conf"
-        dest: /etc/
-        mode: '0755'
+#     - name: Download redis.rpm file
+#       copy:
+#         src: "{{ playbook_dir }}/redis.conf"
+#         dest: /etc/
+#         mode: '0755'
+    
+#     - name: Upload service
+#       copy:
+#         src: "{{ playbook_dir }}/redis.service"
+#         dest: /usr/lib/systemd/system/redis.service
 
-- name: Redis Cluster Install
-  hosts: redis-1
-  remote_user: mda
-  become: yes
-  gather_facts: no
-  tasks:  
+# - name: Redis Cluster Install
+#   hosts: redis-1
+#   remote_user: mda
+#   become: yes
+#   gather_facts: no
+#   tasks:  
 
-    - name: Loading hosts vars
-      include_vars:
-        file: "{{ playbook_dir }}/ips.yml"
-        name: hosts
+#     - name: Loading hosts vars
+#       include_vars:
+#         file: "{{ playbook_dir }}/ips.yml"
+#         name: hosts
 
-     - name: Insert configuration bind section
-       lineinfile:
-        path: /etc/redis.conf
-        regexp: 'bind 127.0.0.1'
-        line: "bind {{ hosts['redis-1'] }}"
+#     - name: Insert configuration bind section
+#       lineinfile:
+#         path: /etc/redis.conf
+#         regexp: 'bind 127.0.0.1'
+#         line: "bind {{ hosts['redis-1'] }}"
 
-- name: Redis Cluster Install
-  hosts: redis-2
-  remote_user: mda
-  become: yes
-  gather_facts: no
-  tasks:  
+# - name: Redis Cluster Install
+#   hosts: redis-2
+#   remote_user: mda
+#   become: yes
+#   gather_facts: no
+#   tasks:  
 
-    - name: Loading hosts vars
-      include_vars:
-        file: "{{ playbook_dir }}/ips.yml"
-        name: hosts
+#     - name: Loading hosts vars
+#       include_vars:
+#         file: "{{ playbook_dir }}/ips.yml"
+#         name: hosts
 
-     - name: Insert configuration bind section
-       lineinfile:
-        path: /etc/redis.conf
-        regexp: 'bind 127.0.0.1'
-        line: "bind {{ hosts['redis-2'] }}"
+#     - name: Insert configuration bind section
+#       lineinfile:
+#         path: /etc/redis.conf
+#         regexp: 'bind 127.0.0.1'
+#         line: "bind {{ hosts['redis-2'] }}"
 
-- name: Redis Cluster Install
-  hosts: redis-3
-  become: yes
-  remote_user: mda
-  gather_facts: no
-  tasks:  
+# - name: Redis Cluster Install
+#   hosts: redis-3
+#   become: yes
+#   remote_user: mda
+#   gather_facts: no
+#   tasks:  
 
-    - name: Loading hosts vars
-      include_vars:
-        file: "{{ playbook_dir }}/ips.yml"
-        name: hosts
+#     - name: Loading hosts vars
+#       include_vars:
+#         file: "{{ playbook_dir }}/ips.yml"
+#         name: hosts
 
-     - name: Insert configuration bind section
-       lineinfile:
-        path: /etc/redis.conf
-        regexp: 'bind 127.0.0.1'
-        line: "bind {{ hosts['redis-3'] }}"
+#     - name: Insert configuration bind section
+#       lineinfile:
+#         path: /etc/redis.conf
+#         regexp: 'bind 127.0.0.1'
+#         line: "bind {{ hosts['redis-3'] }}"
 
-- name: Redis Cluster Install
-  hosts: redis-4
-  become: yes
-  remote_user: mda
-  gather_facts: no
-  tasks:  
+# - name: Redis Cluster Install
+#   hosts: redis-4
+#   become: yes
+#   remote_user: mda
+#   gather_facts: no
+#   tasks:  
 
-    - name: Loading hosts vars
-      include_vars:
-        file: "{{ playbook_dir }}/ips.yml"
-        name: hosts
+#     - name: Loading hosts vars
+#       include_vars:
+#         file: "{{ playbook_dir }}/ips.yml"
+#         name: hosts
 
-     - name: Insert configuration bind section
-       lineinfile:
-         path: /etc/redis.conf
-         regexp: 'bind 127.0.0.1'
-         line: "bind {{ hosts['redis-4'] }}"
+#     - name: Insert configuration bind section
+#       lineinfile:
+#          path: /etc/redis.conf
+#          regexp: 'bind 127.0.0.1'
+#          line: "bind {{ hosts['redis-4'] }}"
 
-- name: Redis Cluster Install
-  hosts: redis-5
-  become: yes
-  remote_user: mda
-  gather_facts: no
-  tasks:  
+# - name: Redis Cluster Install
+#   hosts: redis-5
+#   become: yes
+#   remote_user: mda
+#   gather_facts: no
+#   tasks:  
 
-    - name: Loading hosts vars
-      include_vars:
-        file: "{{ playbook_dir }}/ips.yml"
-        name: hosts
+#     - name: Loading hosts vars
+#       include_vars:
+#         file: "{{ playbook_dir }}/ips.yml"
+#         name: hosts
 
-     - name: Insert configuration bind section
-       lineinfile:
-        path: /etc/redis.conf
-        regexp: 'bind 127.0.0.1'
-        line: "bind {{ hosts['redis-5'] }}"
+#     - name: Insert configuration bind section
+#       lineinfile:
+#         path: /etc/redis.conf
+#         regexp: 'bind 127.0.0.1'
+#         line: "bind {{ hosts['redis-5'] }}"
 
-- name: Redis Cluster Install
-  hosts: redis-6
-  become: yes
-  remote_user: mda
-  gather_facts: no
-  tasks:  
+# - name: Redis Cluster Install
+#   hosts: redis-6
+#   become: yes
+#   remote_user: mda
+#   gather_facts: no
+#   tasks:  
 
-     - name: Loading hosts vars
-      include_vars:
-        file: "{{ playbook_dir }}/ips.yml"
-        name: hosts
+#      - name: Loading hosts vars
+#        include_vars:
+#          file: "{{ playbook_dir }}/ips.yml"
+#          name: hosts
 
-     - name: Insert configuration bind section
-       lineinfile:
-        path: /etc/redis.conf
-        regexp: 'bind 127.0.0.1'
-        line: "bind {{ hosts['redis-6'] }}"
+#      - name: Insert configuration bind section
+#        lineinfile:
+#          path: /etc/redis.conf
+#          regexp: 'bind 127.0.0.1'
+#          line: "bind {{ hosts['redis-6'] }}"
 
-- name: Enable redis.service
-  hosts: redis
-  become: yes
-  remote_user: mda
-  gather_facts: no
-  tasks:
+# - name: Enable redis.service
+#   hosts: redis
+#   become: yes
+#   remote_user: mda
+#   gather_facts: no
+#   tasks:
 
-    - name: Enable redis service
-      service:
-        name: redis
-        state: enabled
+#     - name: Enable redis service
+#       service:
+#         name: redis
+#         state: started
+#         enabled: yes
 
-    - name: Restart for all server
-      reboot:
+#     - name: Restart for all server
+#       reboot:
 
 - name: Create redis cluster
   hosts: redis-1
