@@ -44,8 +44,8 @@
       command: mv /etc/redis.conf /etc/redis_backup.conf
 
     - name: Download redis.rpm file
-      get_url:
-        url: https://raw.githubusercontent.com/aytemuryakup/ansible/master/Redis/redis.conf
+      copy:
+        src: "{{ playbook_dir }}/redis.conf"
         dest: /etc/
         mode: '0755'
 
