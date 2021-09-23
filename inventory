@@ -1,7 +1,7 @@
 [redis]
-test-redis01 ansible_host=10.110.5.12
-test-redis02 ansible_host=10.110.5.13
-test-redis03 ansible_host=10.110.5.14
-test-redis04 ansible_host=10.110.5.15
-test-redis05 ansible_host=10.110.5.16
-test-redis06 ansible_host=10.110.5.17
+redis-1 ansible_host=
+redis-2 ansible_host=
+redis-3 ansible_host=
+redis-4 ansible_host=
+redis-5 ansible_host=
+redis-6 ansible_host=
