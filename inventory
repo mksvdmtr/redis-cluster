@@ -1,7 +1,7 @@
 [redis]
-redis-1 ansible_host=
-redis-2 ansible_host=
-redis-3 ansible_host=
-redis-4 ansible_host=
-redis-5 ansible_host=
-redis-6 ansible_host=
+redis-1 ansible_host= ansible_user=
+redis-2 ansible_host= ansible_user=
+redis-3 ansible_host= ansible_user=
+redis-4 ansible_host= ansible_user=
+redis-5 ansible_host= ansible_user=
+redis-6 ansible_host= ansible_user=

@@ -1,7 +1,6 @@
 ---
 - name: Setting var file
   hosts: redis
-  remote_user: dmaksakov
   become: yes
   tasks:
     - name: Collecting IPs
@@ -13,7 +12,6 @@
       tags: get-ips
 
 - name: Redis Cluster Install
-  remote_user: dmaksakov
   hosts: redis
   become: yes
   gather_facts: no
@@ -54,7 +52,6 @@
 
 - name: Redis Cluster Install
   hosts: redis-1
-  remote_user: dmaksakov
   become: yes
   gather_facts: no
   tasks:
@@ -71,7 +68,6 @@
 
 - name: Redis Cluster Install
   hosts: redis-2
-  remote_user: dmaksakov
   become: yes
   gather_facts: no
   tasks:
@@ -89,7 +85,6 @@
 - name: Redis Cluster Install
   hosts: redis-3
   become: yes
-  remote_user: dmaksakov
   gather_facts: no
   tasks:
     - name: Loading hosts vars
@@ -106,7 +101,6 @@
 - name: Redis Cluster Install
   hosts: redis-4
   become: yes
-  remote_user: dmaksakov
   gather_facts: no
   tasks:
     - name: Loading hosts vars
@@ -123,7 +117,6 @@
 - name: Redis Cluster Install
   hosts: redis-5
   become: yes
-  remote_user: dmaksakov
   gather_facts: no
   tasks:
     - name: Loading hosts vars
@@ -140,7 +133,6 @@
 - name: Redis Cluster Install
   hosts: redis-6
   become: yes
-  remote_user: dmaksakov
   gather_facts: no
   tasks:
     - name: Loading hosts vars
@@ -157,7 +149,6 @@
 - name: Enable redis.service
   hosts: redis
   become: yes
-  remote_user: dmaksakov
   gather_facts: no
   tasks:
     - name: Enable redis service
@@ -173,7 +164,6 @@
 - name: Create redis cluster
   hosts: redis-1
   become: yes
-  remote_user: dmaksakov
   gather_facts: no
   tasks:
     - name: Loading hosts vars
