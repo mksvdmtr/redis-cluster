@@ -39,7 +39,7 @@
       command: mv /etc/redis.conf /etc/redis_backup.conf
       ignore_errors: yes
 
-    - name: Download redis.rpm file
+    - name: Upload redis.conf file
       copy:
         src: "{{ playbook_dir }}/redis.conf"
         dest: /etc/
